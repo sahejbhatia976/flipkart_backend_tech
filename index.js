@@ -8,9 +8,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const { router: authRoutes, authenticateJWT } = require("./auth");
-const cartRouter = require("./cart");
+const cartRoutes = require("./cart");
 app.use(authRoutes);
-app.use(cartRouter);
+app.use(cartRoutes);
 
 mongoose.connect(
   "mongodb+srv://sahejbhatia748:<Saahe123>@cluster0.bafcj5b.mongodb.net/",
@@ -33,11 +33,9 @@ app.get("/product/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) {
-      return res
-        .status(404)
-        .json({
-          message: "The itemsthat you were searching for does not exists",
-        });
+      return res.status(404).json({
+        message: "The itemsthat you were searching for does not exists",
+      });
     } else {
       res.json(product);
     }
