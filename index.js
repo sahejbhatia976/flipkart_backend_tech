@@ -13,7 +13,7 @@ app.use(authRoutes);
 app.use(cartRoutes);
 
 mongoose.connect(
-  "mongodb+srv://sahejbhatia748:<Saahe123>@cluster0.bafcj5b.mongodb.net/",
+  "mongodb+srv://sahejbhatia748:<Saahe123>@cluster0.bafcj5b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
