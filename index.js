@@ -24,6 +24,32 @@ const productSchema = new mongoose.Schema({ name: String, price: Number });
 const Product = mongoose.model("Product", productSchema);
 module.exports.Product = Product;
 
+const fs = require("fs");
+const path = require("path");
+
+// Import and insert product data once MongoDB connects
+mongoose.connection.once("open", async () => {
+  console.log("MongoDB connected");
+
+  try {
+    // Read product.json file
+    const filePath = path.join(__dirname, "product.json");
+    const jsonData = fs.readFileSync(filePath, "utf-8");
+    const products = JSON.parse(jsonData);
+
+    // Check if products already exist to prevent duplication
+    const existing = await Product.countDocuments();
+    if (existing === 0) {
+      await Product.insertMany(products);
+      console.log("✅ Products inserted successfully into MongoDB!");
+    } else {
+      console.log("📝 Products already exist in the database.");
+    }
+  } catch (err) {
+    console.error("❌ Failed to insert products:", err.message);
+  }
+});
+
 app.get("/products", async (req, res) => {
   try {
     const products = await Product.find();
