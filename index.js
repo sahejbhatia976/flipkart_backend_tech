@@ -13,7 +13,7 @@ app.use(authRoutes);
 app.use(cartRoutes);
 
 mongoose.connect(
-  "mongodb+srv://sahejbhatia748:<Saahe123>@cluster0.bafcj5b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+  "mongodb+srv://sahejbhatia748:Saahe123@cluster0.bafcj5b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -29,7 +29,7 @@ app.get("/products", async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-    res.status(500).json({ error: "There is inernal server error" });
+    res.status(500).json({ error: "There is internal server error" });
   }
 });
 
@@ -38,7 +38,7 @@ app.get("/product/:id", async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({
-        message: "The itemsthat you were searching for does not exists",
+        message: "The items that you were searching for does not exists",
       });
     } else {
       res.json(product);
