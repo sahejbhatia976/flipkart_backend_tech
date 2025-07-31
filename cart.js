@@ -4,31 +4,35 @@ const router = express.Router();
 
 const Cart = mongoose.model(
   "Cart",
-  new mongoose.Schema({
-    userId: String,
-    items: [
-      {
-        productId: String,
-        quantity: Number,
-      },
-    ],
-  })
+  new mongoose.Schema(
+    {
+      userId: String,
+      status: { type: String, default: "active" },
+      items: [
+        {
+          productId: String,
+          quantity: Number,
+        },
+      ],
+    },
+    { timestamps: true } // adds createdAt and updatedAt
+  )
 );
 
 router.post("/cart/add", async (req, res) => {
   try {
-    const { productId, quantity = 1, user } = req.body;
+    const { productId, quantity = 1, userId } = req.body;
 
-    if (!productId || !user) {
+    if (!productId || !userId) {
       return res
         .status(400)
-        .json({ success: false, message: "ProductId and user are required" });
+        .json({ success: false, message: "ProductId and userId are required" });
     }
 
-    let cart = await Cart.findOne({ userId: user, status: "active" });
+    let cart = await Cart.findOne({ userId, status: "active" });
 
     if (!cart) {
-      cart = new Cart({ userId: user, items: [], status: "active" });
+      cart = new Cart({ userId, items: [], status: "active" });
     }
 
     const existingItemIndex = cart.items.findIndex(
@@ -44,7 +48,6 @@ router.post("/cart/add", async (req, res) => {
       });
     }
 
-    cart.updatedAt = new Date();
     await cart.save();
 
     res.status(201).json({

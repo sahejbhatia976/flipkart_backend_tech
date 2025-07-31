@@ -14,11 +14,23 @@ app.use(authRoutes);
 app.use(cartRoutes);
 
 mongoose.connect(
-  "mongodb+srv://sahejbhatia748:Saahe123@cluster0.bafcj5b.mongodb.net/",
+  "mongodb+srv://sahejbhatia748:Saahe123@cluster0.bafcj5b.mongodb.net/ecommerce",
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
-const productSchema = new mongoose.Schema({ name: String, price: Number });
+const productSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  price: Number,
+  discountPercentage: Number,
+  rating: Number,
+  stock: Number,
+  brand: String,
+  category: String,
+  thumbnail: String,
+  images: [String],
+});
+
 const Product = mongoose.model("Product", productSchema);
 module.exports.Product = Product;
 
